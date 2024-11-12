@@ -1,8 +1,3 @@
-%%time
-
-### =========================================================================
-### =========================================================================
-
 ### IMPORT MODULES
 
 import pandas as pd
@@ -15,24 +10,23 @@ from open_files import *
 from functions_algorithm import *
 from conditions import *
 from results import *
-
+import warnings
+warnings.filterwarnings('ignore')
 
 ### =========================================================================
 ### =========================================================================
 
 ## === !!! CHANGE ONLY HERE !!!
 
-telescope='SPHERE-2'        #Change: name of the telescope  - SPHERE-2 / SPHERE-3
-type_analyse='electronic'   #Change: type of analyse - only_sig / electronic / experiment
+telescope='SPHERE-3'        #Name of the telescope  -> SPHERE-2 / SPHERE-3
+type_analyse='only_sig'   #Type of analyse -> only_sig / electronic / experiment
 
-if type_analyse!='experiment': 
-    En, nuclei, H = 10, 'Fe', 900 #Change: energy, nuclei, altitude
-else:
-    En, nuclei, H = '', '', ''
+En = 10 #Energy, PeV
+nuclei = 'P' #N, Fe
+H = 500 #detector altitude, m
 
-maindir = f'/Users/clemence/Documents/Магистратура_наука/Научная_работа/Data/{telescope}/{type_analyse}/'  #Change the directory path
-if type_analyse!='experiment':
-    maindir=maindir+f'{type_analyse}_{En}PeV_{nuclei}_{H}m/' #Change the name of the sample
+maindir = f'/Users/clemence/Documents/Магистратура_наука/Научная_работа/Data/{telescope}/{type_analyse}/{type_analyse}_{En}PeV_{nuclei}_{H}m/'  #Directory of the event files
+dir_params = '/Users/clemence/Documents/Магистратура_наука/Научная_работа/Data/Initial_data/' #Directory of initial parameters
 
 ## === !!! END CHANGE ONLY HERE !!!
 
@@ -42,25 +36,39 @@ if type_analyse!='experiment':
 ## === DASHBOARD
 
 for filename in os.listdir(maindir):
-    if type_analyse=='experiment':
+   
+    #Do not read the file "DS store"
+    
+    if type_analyse == 'experiment':
         if not filename.endswith('.txt'):
             continue
-    #Initial values
-    initial_values=Initial_values(type_analyse, telescope, maindir+filename,nuclei,En,H)
-    #Open files
-    files=Openfiles(initial_values)
-    #Algorithm of angles determination
-    algorithm=Functions_algorithm(initial_values,files)
-    algorithm.length
+    if type_analyse != 'experiment':
+        if not filename[-1].isdigit(): 
+            continue
     
-    # #Condition for events selection
-    conditions=Conditions(algorithm,initial_values)
+    #Pre opening, obligatory!
+    
+    initial_values=Initial_values(telescope, type_analyse, En, nuclei, H, maindir+filename, dir_params)
+    files=Openfiles(initial_values)
+    fnc_algorithm=Functions_algorithm(initial_values, files)
+    
+    conditions=Conditions(fnc_algorithm,initial_values) 
+    if conditions.algorithm_condition != 'done':
+        continue
+    
+    #Results of the functions, choose which result see
+    
+    print(filename)
+    print('duration = ', fnc_algorithm.length(), 'ns')
+    print('axis x, (mm) y (mm), d (m)):',fnc_algorithm.axis)
+    print('theta (rad), phi (rad), a0, a1, a2:', fnc_algorithm.angles)
+    print('     ')
     
     #Results and Figures
-    results_pictures=Results(initial_values,algorithm)
+    results_pictures=Results(initial_values, fnc_algorithm)
     # results_pictures.fig_sum_impulse #Fig
     # results_pictures.front  #Fig
-    results_pictures.angles #Results
+    # print(results_pictures.angles) #Results
    
     
 
