@@ -17,6 +17,9 @@ class Functions_algorithm:
         self.x_mos=self.initial_values.x_mos
         self.y_mos=self.initial_values.y_mos
         self.total_number_of_pmt=self.initial_values.total_number_of_pmt
+        self.margin_left  = self.initial_values.margin_left
+        self.margin_right = self.initial_values.margin_right
+        self.N_std_background_sum = self.initial_values.N_std_background_sum
         self.sum_of_impulse=self.sum_of_impulse()
         self.intensity_signal=self.intensity()
         self.diapason=self.diapason()
@@ -40,7 +43,7 @@ class Functions_algorithm:
         max_signal=summed_impulse[1:-1].max() #amplitude max
         noise_pied=summed_impulse[1:self.pied][summed_impulse[1:self.pied]>0] #piedestal
         if self.type_analyse != 'only_sig':
-            intensity_signal=(max_signal)/(noise_pied.mean()+3*noise_pied.std())
+            intensity_signal=(max_signal)/(noise_pied.mean()+ self.N_std_background_sum*noise_pied.std())
             return max_signal, intensity_signal
         return max_signal, 0
            
@@ -50,15 +53,14 @@ class Functions_algorithm:
        imax = summed_impulse[:-1].idxmax() #index of the max impulse --> delete the last cell -> > max of impulse
        start, stop = imax, imax
        maxpart = 1
-       background=np.mean(summed_impulse[1:self.pied])+3*np.std(summed_impulse[1:self.pied])
+       background=np.mean(summed_impulse[1:self.pied])+ self.N_std_background_sum*np.std(summed_impulse[1:self.pied])
        bgd = maxpart * background
        while summed_impulse[start] > bgd and start!=summed_impulse.index[0]:
            start -= 1
        while summed_impulse[stop] > bgd and stop!=summed_impulse.index[-1]:
            stop += 1
-       margin_left,margin_right= 30, 30       
-       stop  += margin_right
-       start -= margin_left      
+       stop  += self.margin_right
+       start -= self.margin_left      
        event_diapason=self.event[start:stop] #diapason of the impulse - n photons
        cells_diapason=self.cells[start:stop] #diapason of the impulse - time       
        event_diapason.index=np.arange(len(event_diapason)) #reindex new finded diapason
@@ -73,10 +75,10 @@ class Functions_algorithm:
         x_snow=-b*self.x_mos                  #x on snow
         y_snow=-b*self.y_mos                  #y on snow
         t_path=((np.sqrt(High**2+(np.sqrt(np.array(x_snow)**2+np.array(y_snow)**2))**2))/self.initial_values.c_ns) #path from mosaic to snow in ns
-        return x_snow, y_snow, t_path, b   
+        return x_snow, y_snow, t_path 
         
     def axis(self): 
-        'Return the axis of the EAS by 3 different methods:'
+        'Return the axis of the EAS on snow [x (m), y (m), distance from center (mm)] by 3 different methods:'
         'if the maximum is on the last circle, this is the axis'
         'if the maximum is on the 2 before last circle, the axis is by gravity center of the max (1 circle around the max)'
         'if the maximum is inside, the axis is by gravity center of the max (2 circles around the max)'
@@ -86,7 +88,7 @@ class Functions_algorithm:
         d0_from_center=np.sqrt(x0_max**2+y0_max**2)
         if d0_from_center>self.initial_values.d0_center:
             x0, y0 = x0_max, y0_max
-            return x0, y0, d0_from_center
+            return x0*-b, y0*-b, d0_from_center
         else:
             d_pmt_to_d_max=np.sqrt( (np.array(self.x_mos)-x0_max)**2  + (np.array(self.y_mos)-y0_max)**2  ) #distance of each PMT from the max PMT, m
             if d0_from_center>self.initial_values.d0_before_c and d0_from_center<self.initial_values.d0_center: #if the max PMT is on the circle before the last one
@@ -107,35 +109,35 @@ class Functions_algorithm:
             event=self.event #read_mosaic_hits_file()
             event_cells_sup_0=pd.DataFrame({'event':np.array(event.max(axis=1)),'cells':self.cells})
             event_cells_sup_0=event_cells_sup_0[event_cells_sup_0['event']>0]
-            cells_sup0=event_cells_sup_0['cells'] #Delete 90% on the right and the left
+            cells_sup0=event_cells_sup_0['cells'] #Delete 5% on the right and the left
             lim_inf,lim_sup = np.percentile(np.array(cells_sup0), 5), np.percentile(np.array(cells_sup0), 95) #percent of the impulse saved
             idx_95=self.cells[cells_sup0[cells_sup0>lim_sup].index[0]-1]
             idx_5=self.cells[cells_sup0[cells_sup0<lim_inf].index[-1]+1]
             lenght_impulse=idx_95-idx_5 #lenght
         elif self.type_analyse!='only_sig': #signal with background
             cells_diapason=self.diapason[1]
-            lenght_impulse=cells_diapason[-1]-cells_diapason[0]-60*12.5  #lenght
+            lenght_impulse=cells_diapason[-1]-cells_diapason[0]-(self.margin_left+self.margin_right)*self.initial_values.bins  #lenght
         return lenght_impulse   
     
     def amplification(self): 
-        'Return the amplified signal in each channel'
+        'Return the amplified signal in each channel (N, t)'
         find_diapason=self.diapason
         event_diapason,cells_diapason=find_diapason[0],find_diapason[1]
-        amplif_signal=event_diapason.rolling(window=4).sum().dropna()#amplification of the signal by sliding window
+        amplif_signal=event_diapason.rolling(window=self.initial_values.window).sum().dropna()#amplification of the signal by sliding window
         amplif_signal.index=np.arange(0,len(amplif_signal)) #reindex
         amplif_cells=cells_diapason[:-3] #t, ns
         return amplif_signal, amplif_cells #N photons, time  
     
     def noise_pmt(self): #Noise in each PMT
         'Return the noise in piedestal for each channel'
-        noise_window=self.event[1:self.pied].rolling(window=4).sum().dropna() #amplify the piedestal
+        noise_window=self.event[1:self.pied].rolling(window=self.initial_values.window).sum().dropna() #amplify the piedestal
         if self.type_analyse=='only_sig':
             mean_std=[0]*self.total_number_of_pmt #threshold <bg>+3 std
         else:
-            mean_std=noise_window[noise_window>0].mean()+3*noise_window[noise_window>0].std() #threshold <bg>+3std
+            mean_std=noise_window[noise_window>0].mean()+self.initial_values.N_std_background_each*noise_window[noise_window>0].std() #threshold <bg>+3std
         return mean_std
 
-    def front_up_noise(self): #Selection CRITERIA PMT: noise / Front x,y,t,N above the noise
+    def front_up_noise(self): #Selection CRITERIA PMT: noise / Front [x,y,t,N] above the noise on snow
         'First criteria for PMT'
         'Return the PMT with N photons above the background'
         N_t_amplification=self.amplification #amplification of the new diapason
@@ -151,8 +153,8 @@ class Functions_algorithm:
         x_y_t_N['t_max']=x_y_t_N['t_max']-t_path[np.array(x_y_t_N['PMT']).astype(int)]        
         return x_y_t_N       
         
-    def DFS(self): #Selection CRITERIA PMT: diapason / DFS method: PMT with signal
-        'Second criteria for PMT'
+    def DFS(self): #Selection CRITERIA PMT: diapason / DFS method: PMT with signal, Front [x,y,t,N] 
+        'Second criteria for PMT, Front [x,y,t,N] '
         'Return the PMT that pass through DFS'
         'The impulse time is within the limit of time t ± n of a neighbor '
         x_y_t_N=self.front_up_noise #x,y,t,N        
@@ -185,7 +187,7 @@ class Functions_algorithm:
         return x_y_t_N_good        
         
     def neighbors(self): 
-        'Third criteria for PMT'
+        'Third criteria for PMT, Front [x,y,t,N] '
         'Return the PMT with at least 2 neighbors PMT'
         x_y_t_N_good = self.DFS
         bad_PMT=[]
@@ -196,7 +198,7 @@ class Functions_algorithm:
         return x_y_t_N_neighbors
         
     def angles(self):
-        'Return the zenith and azimuthal angles, and front parameters a0, a1, a2 '
+        'Return theta (rad), phi (rad), a0, a1, a2 '
         'Using multistart to avoid the local minimum'
         'The algorithm is based on the least squares method'
         theta_initt=[0.05,0,1,0.15, 0.2,0.25, 0.3,0.35]*8 #multistart, in rad
