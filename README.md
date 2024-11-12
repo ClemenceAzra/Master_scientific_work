@@ -48,6 +48,6 @@ Open the repository Examples/
 
 - 10 files of EAS events are loaded in the directory: data:SPHERE-3:only_sig:only_sig_10PeV_P_500m
 
-- the file main_and_results.py contains the dashboard opening these files and printed results
+- the file main_and_results.py contains the dashboard opening these files and printed results for selected events
 
 
