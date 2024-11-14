@@ -5,4 +5,4 @@
 from distutils.core import setup
 from setuptools import find_packages
 
-setup(name='EAS_angles_sphere', version='1.0', packages=find_packages())
+setup(name='EAS_angles_sphere', version='1.0', url = 'https://github.com/ClemenceAzra/Master_scientific_work', packages=find_packages())
