@@ -17,7 +17,7 @@ requirements = read_requirements("requirements.txt")
 
 setup(
     name = 'EAS_angles_sphere',
-    version = '1.0.',
+    version = '1.0',
     author = 'Clemence Azra',
     author_email = 'clemenceanastasia@gmail.com',
     url = 'https://github.com/ClemenceAzra/Master_scientific_work/',
