@@ -37,9 +37,9 @@ The latest source code is available from the github repository at https://github
   - Some are constant and not changeable (telescope geometry) : #Unchangeable
   - Others are can be changed (thresholds, response...) : #Changeable
 
-- open_files.py : create a dataframe of size: (N bins of response * N PMT)
+- ```open_files.py``` : create a dataframe of size: (N bins of response * N PMT)
   
-- functions_algorithm.py: all of the created functions to finally calculate the arrival angles
+- ```functions_algorithm.py```: all of the created functions to finally calculate the arrival angles
   - sum_of_impulse: return the summed impulse over all channels in the response
   - intensity: return the maximum amplitude of the summed impulse (N photons), and the intensity (multiplicity max amplitude / background) 
   - diapason: return the new temporal diapason of the impulse in the response: list of N photons, list of time (ns), list of background values. len = number of bins
@@ -53,9 +53,9 @@ The latest source code is available from the github repository at https://github
   - neighbors: return the channels with at least N neighbors
   - angles: return both zenith (theta) and azimthal angles (phi) in rad, and front parameters a0, a1, a2 
 
-- conditions.py : all the event selection criteria
+- ```conditions.py``` : all the event selection criteria
 
-- results.py: calculate the error values, plot figures, save data
+- ```results.py```: calculate the error values, plot figures, save data
   - delta: return angles errors in deg
   - save_results: save values (e.g. values of angles, axis...)
   - fig_sum_impulse: plot the summed impulse in the response
@@ -65,8 +65,8 @@ The latest source code is available from the github repository at https://github
 
 In the repository https://github.com/ClemenceAzra/Master_scientific_work/tree/main/Examples
 
-- 10 files of EAS events are loaded in the directory: data:SPHERE-3:only_sig:only_sig_10PeV_P_500m
+- 10 files of EAS events are loaded in the directory: ```data:SPHERE-3:only_sig:only_sig_10PeV_P_500m```
 
-- the file main_and_results.py contains the dashboard opening these files and printed results for selected events
+- the ```file main_and_results.py``` contains the dashboard opening these files and printed results for selected events
 
 
