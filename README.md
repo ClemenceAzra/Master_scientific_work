@@ -2,7 +2,11 @@
 
 The work has the title "Estimation of the EAS axis position and the arrival direction based on the Cherenkov light characteristic in the SPHERE experiment".
 
+EAS_angles_sphere is a package for Python developed for the MSU Sphere experiment.
+
 ## Getting EAS_angles_sphere
+
+EAS_angles_sphere supports Python 3.10.9 and later.
 
 The latest release version is available and can be installed using
 
