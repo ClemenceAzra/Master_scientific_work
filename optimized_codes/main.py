@@ -25,8 +25,8 @@ En = 10 #Energy, PeV
 nuclei = 'P' #N, Fe
 H = 500 #detector altitude, m
 
-maindir = f'/Users/clemence/Documents/Магистратура_наука/Научная_работа/Data/{telescope}/{type_analyse}/{type_analyse}_{En}PeV_{nuclei}_{H}m/'  #Directory of the event files
-dir_params = '/Users/clemence/Documents/Магистратура_наука/Научная_работа/Data/Initial_data/' #Directory of initial parameters
+maindir = f'./Data/{telescope}/{type_analyse}/{type_analyse}_{En}PeV_{nuclei}_{H}m/'  #Directory of the event files
+dir_params = './Data/Initial_data/' #Directory of initial parameters
 
 ## === !!! END CHANGE ONLY HERE !!!
 
