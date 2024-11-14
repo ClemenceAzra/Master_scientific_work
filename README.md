@@ -2,6 +2,14 @@
 
 The work has the title "Estimation of the EAS axis position and the arrival direction based on the Cherenkov light characteristic in the SPHERE experiment".
 
+## Getting EAS_angles_sphere
+
+The latest release version is available and can be installed using
+
+```
+pip install EAS_angles_sphere
+```
+
 ## Algorithm 
 
 All of the used codes are in the repository optimized_codes/
