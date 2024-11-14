@@ -11,7 +11,7 @@ EAS_angles_sphere supports Python 3.10.9 and later.
 The latest release version is available and can be installed using
 
 ```
-pip install https://github.com/ClemenceAzra/Master_scientific_work.git
+pip install git+https://github.com/ClemenceAzra/Master_scientific_work.git
 ```
 ### Dependencies
 
