@@ -25,7 +25,7 @@ EAS_angles_sphere has a number of well-maintained dependencies in ```requirement
 
 The latest source code is available from the github repository at https://github.com/ClemenceAzra/Master_scientific_work/tree/main/EAS_angles_sphere.
 
-- main.py : dashboard of the algorithm
+- ```main.py``` : dashboard of the algorithm
   - You have to input the directory names, characteristics of EAS events (telescope, altitude, energy, nuclei). 
   - Each dirname of events need to have the same structure: /Data/{telescope}/{type_analyse}/{type_analyse}_{En}PeV_{nuclei}_{H}m/
   - A loop browses the directory files. If the file is not an event file, it is skipped.
@@ -33,7 +33,7 @@ The latest source code is available from the github repository at https://github
   - Conditions skip the events based on event selection criteria.
   - By using fnc_algorithm.name_of_function (see functions_algorithm.py), load the results (axis, angles...).
             
-- initial_values.py: all initial values (telescope geometry, thresholds...)
+- ```initial_values.py```: all initial values (telescope geometry, thresholds...)
   - Some are constant and not changeable (telescope geometry) : #Unchangeable
   - Others are can be changed (thresholds, response...) : #Changeable
 
