@@ -12,7 +12,7 @@ pip install EAS_angles_sphere
 
 ## Algorithm 
 
-All of the used codes are in the repository optimized_codes/
+All of the used codes are in the repository EAS_angles_sphere/
 
 - main.py : dashboard of the algorithm
   - You have to input the directory names, characteristics of EAS events (telescope, altitude, energy, nuclei). 
