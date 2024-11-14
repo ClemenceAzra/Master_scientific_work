@@ -8,10 +8,10 @@ EAS_angles_sphere is a package for Python developed for the SINP MSU SPHERE expe
 
 EAS_angles_sphere supports Python 3.10.9 and later.
 
-The latest release version is available and can be installed using
+The latest release version is available and can be installed in command line using 
 
 ```
-pip install git+https://github.com/ClemenceAzra/Master_scientific_work.git
+gip install https://github.com/ClemenceAzra/Master_scientific_work.git
 ```
 ### Dependencies
 
