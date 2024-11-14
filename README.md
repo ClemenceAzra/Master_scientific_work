@@ -15,8 +15,7 @@ git clone https://github.com/ClemenceAzra/Master_scientific_work.git
 ```
 ### Dependencies
 
-EAS_angles_sphere has a number of well-maintained dependencies which are automatically installed by ```pip```. These include:
-
+EAS_angles_sphere has a number of well-maintained dependencies in ```requirements.txt``` file. These include:
 - numpy>=1.23.5
 - pandas>=2.2.3
 - iminuit>=2.21.3
