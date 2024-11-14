@@ -13,6 +13,14 @@ The latest release version is available and can be installed using
 ```
 pip install EAS_angles_sphere
 ```
+### Dependencies
+
+EAS_angles_sphere has a number of well-maintained dependencies which are automatically installed by ```pip```. These include:
+
+- numpy>=1.23.5
+- pandas>=2.2.3
+- iminuit>=2.21.3
+- matplotlib>=3.7.0
 
 ## Algorithm 
 
