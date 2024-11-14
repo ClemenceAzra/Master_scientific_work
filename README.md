@@ -52,7 +52,7 @@ The latest source code is available from the github repository at https://github
 
 ## Examples of algorithm operation
 
-Open the repository Examples/
+Open the repository https://github.com/ClemenceAzra/Master_scientific_work/tree/main/Examples
 
 - 10 files of EAS events are loaded in the directory: data:SPHERE-3:only_sig:only_sig_10PeV_P_500m
 
