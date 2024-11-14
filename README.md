@@ -10,7 +10,7 @@ The latest release version is available and can be installed using
 pip install EAS_angles_sphere
 ```
 
-The latest source code is available from the github repository at https://github.com/ClemenceAzra/Master_scientific_work/tree/main/EAS_angles_sphere (bjr).
+The latest source code is available from the github repository at https://github.com/ClemenceAzra/Master_scientific_work/tree/main/EAS_angles_sphere.
 
 ## Algorithm 
 
